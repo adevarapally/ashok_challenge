@@ -1,6 +1,13 @@
 Using Ansible as configuration management tool to install and configure Nginx as webserver and update website staic content.
 Ansible directory structure:
-paste image
+README.md
+inventory.yaml
+iptables.yaml
+nginx.yaml
+selfsignedcert.yaml
+site-index.html
+templates-site.conf.j2
+websites.yaml
 
 1) inventory.yaml has the hosts and variables.
 2) nginx.yaml has code to installation and configyration steps.
