@@ -1,0 +1,16 @@
+---
+- hosts: webservers
+  tasks:
+  - name: check endpoint to return a 301
+    uri:
+      url: http://ashokchallenge.com
+      status_code: 301
+      return_content: no
+    register: Redirettohttps
+  - name: check endpoint to return a 200
+    uri:
+      url: http://ashokchallenge.com
+      status_code: 301
+      return_content: no
+    register: Redirettohttps
+  

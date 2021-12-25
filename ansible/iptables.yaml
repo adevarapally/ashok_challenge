@@ -1,0 +1,17 @@
+---
+- hosts: webservers
+  bcome: yes
+  tasks:
+  - name: "Update IP tables to restric to 22, 80 and 443"
+    command:
+        cmd: iptables -A INPUT -p tcp -m tcp -m multiport ! --dports 22,80,443 -j DROP
+  - name: "Log dropped packets"
+    command:
+        cmd: iptables -A INPUT -i eth0 -j LOG --log-prefix "IPtables dropped packets:"
+  - name: "Limit access per minute on port 443"
+    command:
+        cmd: iptables -A INPUT -p tcp --dport 443 -m limit --limit 100/minute --limit-burst 200 -j ACCEPT
+  - name: "Limit access per minute on port 80"
+    command:
+        cmd: iptables -A INPUT -p tcp --dport 80 -m limit --limit 100/minute --limit-burst 200 -j ACCEPT
+

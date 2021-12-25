@@ -1,0 +1,35 @@
+---
+- hosts: webservers
+  become: yes
+  vars:
+    - dns_name: ashokchallenge.com
+    - key_size: 4096
+    - key_type: RSA
+    - country_name: US
+    - email_address: adevarapally@gmail.com
+    - organization_name: Ashok
+    - path: /etc/ssl/certs/
+  tasks:
+    - name: Install openssl packages
+      command:
+        cmd: pip3 install pyOpenSSL
+    - name: Generate an OpenSSL private key
+      openssl_privatekey:
+        path: "/{{ path }}/{{ dns_name }}_privkey.pem"
+        size: "{{ key_size }}"
+        type: "{{ key_type }}"
+        backup: yes
+    - name: Generate an OpenSSL Certificate Signing Request with Subject information
+      openssl_csr:
+        path: "{{ path }}/{{ dns_name }}.csr"
+        privatekey_path: "{{ path }}/{{ dns_name }}_privkey.pem"
+        country_name: "{{ country_name }}"
+        organization_name: "{{ organization_name }}"
+        email_address: "{{ email_address }}"
+        common_name: "{{ dns_name }}"
+    - name: Generate a Self Signed OpenSSL certificate
+      openssl_certificate:
+        path: "{{ path }}/{{ dns_name }}_cert.crt"
+        privatekey_path: "{{ path }}/{{ dns_name }}_privkey.pem"
+        csr_path: "{{ path }}/{{ dns_name }}.csr"
+        provider: selfsigned
